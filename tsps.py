@@ -29,13 +29,18 @@ def find_jpeg_files(root_dir):
 def process_store(jpeg_file, to_dir):
     try:
         exif_dict = piexif.load(jpeg_file)
-        exif_datetime_original = exif_dict["Exif"][
-            piexif.ExifIFD.DateTimeOriginal]
-        try:
-            datetime_original = datetime.datetime.strptime(
-                exif_datetime_original, "%Y:%m:%d %H:%M:%S")
-        except:
-            datetime_original = dateutil.parser.parse(exif_datetime_original)
+        if exif_dict and exif_dict.get("Exif") and exif_dict.get("Exif").get(piexif.ExifIFD.DateTimeOriginal):
+            exif_datetime_original = exif_dict["Exif"][
+                piexif.ExifIFD.DateTimeOriginal]
+            try:
+                datetime_original = datetime.datetime.strptime(
+                    exif_datetime_original, "%Y:%m:%d %H:%M:%S")
+            except:
+                datetime_original = dateutil.parser.parse(
+                    exif_datetime_original)
+        else:
+            datetime_original = datetime.datetime.fromtimestamp(
+                os.stat(jpeg_file).st_mtime)
 
         YYmm, YYmmdd, YYmmdd_HHMMSS = get_datetime_str(datetime_original)
 
@@ -53,7 +58,6 @@ def process_store(jpeg_file, to_dir):
         if not os.path.exists(new_dirpath):
             os.makedirs(new_dirpath, mode=0755)
         shutil.copy2(jpeg_file, new_filepath)
-        raise Exception("hogeee")
     except Exception as e:
         logger.error("%s jpeg_file=%s", e, jpeg_file)
 
