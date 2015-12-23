@@ -52,7 +52,7 @@ def process_store(jpeg_file, to_dir):
         new_dirpath = os.path.join(to_dir, YYmm, YYmmdd)
         if not os.path.exists(new_dirpath):
             os.makedirs(new_dirpath, mode=0755)
-        shutil.copy(jpeg_file, new_filepath)
+        shutil.copy2(jpeg_file, new_filepath)
         raise Exception("hogeee")
     except Exception as e:
         logger.error("%s jpeg_file=%s", e, jpeg_file)
