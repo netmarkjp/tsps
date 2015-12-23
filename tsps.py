@@ -89,10 +89,11 @@ def set_debug():
 @click.option("-f", "--from_dir", required=True)
 @click.option("-t", "--to_dir", required=True)
 @click.option("-d", "--debug", is_flag=True, default=False)
-def tsps(from_dir, to_dir, debug):
+@click.option("-p", "--processes", default=20)
+def tsps(from_dir, to_dir, debug, processes):
     if debug:
         set_debug()
-    pool = Pool(processes=8)
+    pool = Pool(processes=processes)
     for jpeg_file in find_jpeg_files(from_dir):
         logger.debug("=> %s", jpeg_file)
         pool.apply_async(process_store, (jpeg_file, to_dir))
