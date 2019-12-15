@@ -33,6 +33,10 @@ def process_store(jpeg_file, to_dir):
             exif_datetime_original = exif_dict["Exif"][
                 piexif.ExifIFD.DateTimeOriginal]
             try:
+                exif_datetime_original = exif_datetime_original.decode()
+            except:
+                pass
+            try:
                 datetime_original = datetime.datetime.strptime(
                     exif_datetime_original, "%Y:%m:%d %H:%M:%S")
             except:
@@ -56,7 +60,7 @@ def process_store(jpeg_file, to_dir):
         logger.info("%s -> %s", jpeg_file, new_filepath)
         new_dirpath = os.path.join(to_dir, YYmm, YYmmdd)
         if not os.path.exists(new_dirpath):
-            os.makedirs(new_dirpath, mode=0755)
+            os.makedirs(new_dirpath, mode=0o755)
         shutil.copy2(jpeg_file, new_filepath)
     except Exception as e:
         logger.error("%s jpeg_file=%s", e, jpeg_file)

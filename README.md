@@ -21,7 +21,7 @@ When EXIF's datetime cannot get, use original file timestamp.
 tsps --from /Volumes/NONAME --to ~/Pictures/mylife
 ```
 
-May run with python 2.7
+May run with python 2.7, 3.7
 
 # Install
 
